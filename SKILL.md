@@ -6,7 +6,7 @@ version: 1.0.0
 
 # Coding Workflow
 
-A disciplined coding methodology: **plan architecture first → search before build → test incrementally → verify fully**.
+A disciplined coding methodology: **plan architecture first → search before build → implement → test incrementally → verify fully**.
 
 ---
 
@@ -16,13 +16,14 @@ A disciplined coding methodology: **plan architecture first → search before bu
 
 ---
 
-## The Four Phases
+## The Five Phases
 
 ```
-Phase 1  ──  Global Route Planning   →  Architecture + Method Map
-Phase 2  ──  Ponytail + GitHub Search →  Reuse + Minimal Build
-Phase 3  ──  Incremental Testing     →  Partial Unit Verify
-Phase 4  ──  Full Verification       →  Complete System Test
+Phase 1  ──  Global Route Planning    →  Architecture + Method Map
+Phase 2  ──  Ponytail + GitHub Search  →  Reuse + Minimal Build
+Phase 3  ──  Implementation            →  Write code per plan
+Phase 4  ──  Incremental Testing       →  Partial Unit Verify
+Phase 5  ──  Full Verification         →  Complete System Test
 ```
 
 ---
@@ -80,23 +81,43 @@ Stop at the first rung that holds:
 
 ---
 
-## Phase 3 — Incremental Testing
+## Phase 3 — Implementation
 
-**After writing each partial unit of work, test it immediately.**
+### 3.1 Follow the Plan
+- Write code according to Phase 1's architecture and method map.
+- Start with the smallest, most independent unit first.
+- Keep functions focused — one responsibility per function.
 
-### 3.1 What Counts as a Partial Unit
+### 3.2 Code Style
+- Use the ponytail ladder from Phase 2 to keep it minimal.
+- Avoid premature optimization. Make it work, then make it right.
+- Add comments for non-obvious logic and `ponytail:` simplifications.
+
+### 3.3 Implementation Order
+1. Data / models first (if any)
+2. Core logic / backend endpoints
+3. Frontend / UI components
+4. Integration wiring
+
+---
+
+## Phase 4 — Incremental Testing
+
+**After writing each partial unit of work, test it immediately.** Do not write multiple units before testing.
+
+### 4.1 What Counts as a Partial Unit
 - A single function
 - A single API endpoint
 - A single UI component or view
 - A single file modification
 
-### 3.2 Unit Test Checklist
+### 4.2 Unit Test Checklist
 - [ ] Does it run without syntax or compile errors?
 - [ ] Does it produce the expected output for normal inputs?
 - [ ] Does it handle edge cases? (empty input, null, boundary values)
 - [ ] Does it fail gracefully on invalid input?
 
-### 3.3 Test Methods
+### 4.3 Test Methods
 
 | Language / Scope | Check | Command |
 |-----------------|-------|---------|
@@ -106,18 +127,18 @@ Stop at the first rung that holds:
 | API endpoint | Live test | `curl -s -w "%{http_code}" <url>` |
 | Logic | Inline assert | Small demo script or `assert`-based self-check |
 
-### 3.4 Rule: No "Build Everything Then Test"
+### 4.4 Rule: No "Build Everything Then Test"
 - Never write multiple functions without testing the first one.
 - If a unit fails, fix it before moving to the next unit.
 - Accumulate confidence as you go.
 
 ---
 
-## Phase 4 — Full Verification
+## Phase 5 — Full Verification
 
-**After all units are complete, run the full system test.**
+**After all units are complete, run the full system test.** This is a mandatory gate — do not deliver without passing this phase.
 
-### 4.1 Full Test Checklist
+### 5.1 Full Test Checklist
 - [ ] All syntax checks pass (all files).
 - [ ] All API endpoints return expected status codes.
 - [ ] Frontend renders without console errors.
@@ -125,9 +146,16 @@ Stop at the first rung that holds:
 - [ ] No hardcoded paths or credentials left behind.
 - [ ] No dead code or unused imports.
 - [ ] No regression: existing features still work.
+- [ ] *(Self-reference)* This skill itself must be followed: verify before publishing.
 
-### 4.2 Sign-off
-Only after all checks pass, deliver the result to the user. If any check fails, go back to Phase 3 to fix, then re-run Phase 4.
+### 5.2 Sign-off
+Only after all checks pass, deliver the result to the user. If any check fails, go back to Phase 4 to fix, then re-run Phase 5.
+
+### 5.3 Self-Correction
+If the user points out a mistake that Phase 5 should have caught:
+1. Fix the bug immediately.
+2. Add the missed check to the Phase 5 checklist so it's never missed again.
+3. Log the failure in the project memory to prevent recurrence.
 
 ---
 
@@ -137,41 +165,45 @@ If a test fails at any phase:
 1. **Read the error message carefully** — identify the exact line and error type.
 2. **Fix only the failing code** — do not rewrite unrelated parts.
 3. **Re-run the test** for that unit.
-4. **Continue** to the next unit or re-run Phase 4.
+4. **Continue** to the next unit or re-run Phase 5.
 
 ---
 
 ## Quick Reference Card
 
 ```
-```
-┌────────────────────────────────────────────────────────┐
-│  Coding Workflow                                       │
-├────────────────────────────────────────────────────────┤
-│                                                        │
-│  1. PLAN    ──── 架構規劃 + 方法調用地圖                │
-│                   (寫 code 前完成)                      │
-│                                                        │
-│  2. SEARCH  ──── GitHub 搜尋 + ponytail 最小化          │
-│                   (不重複造輪子)                        │
-│                                                        │
-│  3. IMPLEMENT ── 根據規劃實際寫 code                    │
-│                   (寫 code)                             │
-│                                                        │
-│  4. TEST    ──── 每寫一個功能 → 立刻測試               │
-│                   (累積信心，不堆債)                    │
-│                                                        │
-│  5. VERIFY  ──── 全部完成 → 全面驗證                   │
-│                   (沒有遺漏才交貨)                      │
-│                                                        │
-└────────────────────────────────────────────────────────┘
-```
+┌───────────────────────────────────────────────────────────┐
+│  Coding Workflow                                          │
+├───────────────────────────────────────────────────────────┤
+│                                                           │
+│  1. PLAN     ──── 架構規劃 + 方法調用地圖                  │
+│                    (寫 code 前完成)                        │
+│                                                           │
+│  2. SEARCH   ──── GitHub 搜尋 + ponytail 最小化            │
+│                    (不重複造輪子)                          │
+│                                                           │
+│  3. IMPLEMENT ─── 根據規劃實際寫 code                      │
+│                    (寫 code)                               │
+│                                                           │
+│  4. TEST     ──── 每寫一個功能 → 立刻測試                 │
+│                    (累積信心，不堆債)                      │
+│                                                           │
+│  5. VERIFY   ──── 全部完成 → 全面驗證                     │
+│                    (沒有遺漏才交貨)                        │
+│                                                           │
+└───────────────────────────────────────────────────────────┘
 ```
 
 ## Changelog
 
+### 1.0.1 (2026-07-11)
+- Added missing Phase 3 (Implementation)
+- Fixed Quick Reference Card alignment
+- Added Self-Correction section to Phase 5
+- Phase 5 checklist now includes self-reference check
+
 ### 1.0.0 (2026-07-11)
 - Initial release
-- Four-phase workflow: Plan → Search → Test → Verify
+- Five-phase workflow: Plan → Search → Implement → Test → Verify
 - Ponytail integration with GitHub-first search
 - Incremental and full verification checklists
