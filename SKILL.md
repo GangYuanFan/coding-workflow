@@ -1,7 +1,7 @@
 ---
 name: vibecode-workflow
 description: "Coding workflow methodology: plan, search, test, verify"
-version: 1.1.1
+version: 1.2.0
 ---
 
 <!--
@@ -180,13 +180,14 @@ before testing the first.**
 
 #### 4.3 Test Methods
 
-| Language / Scope | Check | Command |
-|-----------------|-------|---------|
-| JavaScript | Syntax | `node -e "new Function(code)"` |
-| Python | Syntax | `python3 -m py_compile file.py` |
-| HTML | JS blocks | Extract `<script>` and run through `new Function()` |
-| API endpoint | Live test | `curl -s -w "%{http_code}" <url>` |
+| Language / Scope | Check | Command / Example |
+|-----------------|-------|-------------------|
+| JavaScript | **Logic Assert** | `node -e "const {fn} = require('./file'); console.assert(fn(1) === 2, 'Fail')"` |
+| Python | **Logic Assert** | `python3 -c "from file import fn; assert fn(1) == 2"` |
+| HTML | JS blocks | Extract `<script>` and run through `new Function()` with a test case |
+| API endpoint | Live test | `curl -s -w "%{http_code}" <url>` (Check for expected status code) |
 | Logic | Inline assert | Small demo script or `assert`-based self-check |
+| Syntax (Fast) | Syntax | `node -e "new Function(code)"` or `python3 -m py_compile file.py` |
 
 #### 4.4 Decision: Pass or Fail?
 - **PASS** → Go back to Phase 3 to implement the next module/block.
@@ -214,6 +215,8 @@ This is a mandatory gate — do not deliver without passing this phase.
 ### 5.2 Sign-off
 Only after all checks pass, deliver the result to the user. If any check fails,
 go back to Phase 4 to fix, then re-run Phase 5.
+
+**Commit Hygiene**: Before delivering, ensure the changes are split into clean, single-purpose commits following standard conventions (e.g., `feat:`, `fix:`). Each commit should represent one logical unit of work.
 
 ### 5.3 Self-Correction
 If the user points out a mistake that Phase 5 should have caught:
@@ -263,6 +266,10 @@ If a single module/function fails Phase 4 testing or Phase 5 verification **more
 ---
 
 ## Changelog
+
+### 1.2.0 (2026-07-11)
+- Upgraded **Phase 4.3 Test Methods** from syntax checks to **Logic Assertions** (forcing verification of expected outputs).
+- Added **Commit Hygiene Lock** to Phase 5.2 (enforcing clean, single-purpose commits).
 
 ### 1.1.1 (2026-07-11)
 - Added **Impact Analysis** to Phase 1.1 to prevent regressions in shared components.
