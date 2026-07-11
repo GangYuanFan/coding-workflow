@@ -1,13 +1,35 @@
 ---
 name: vibecode-workflow
 description: "Coding workflow methodology: plan, search, test, verify"
-version: 1.0.3
+version: 1.1.0
 ---
+
+<!--
+# AGENT ENFORCEMENT GUARDRAIL
+# MANDATORY BEHAVIOR RULES:
+# 1. Every response MUST start with a status tag: [CURRENT_PHASE: X]
+# 2. STRICTLY PROHIBITED from advancing to Phase N+1 until the user explicitly approves the output of Phase N (e.g., "Proceed to Phase 2").
+# 3. ZERO-CODE LOCK: In Phase 1 and Phase 2, the Agent's output window MUST contain 0 lines of implementation code. If any code snippet is generated before Phase 3, it is a FATAL PROTOCOL VIOLATION.
+# 4. MICRO-COMMIT RULE: The Agent can only implement ONE function/module per response. After implementing that single unit, the Agent MUST STOP WRITING and output the exact Phase 4 verification command, handing the turn back to the user.
+# 5. TOOL-USE ENFORCEMENT: In Phase 2, you MUST execute at least one search/grep query relevant to the task and print the tool output log. "Thinking about it" is not searching.
+# 6. SIGN-OFF BLUEPRINT: Phase 1.4 output MUST follow the prescribed Markdown template.
+# -------------------------------------------------------------------------------------------
+-->
 
 # Coding Workflow
 
 A disciplined coding methodology: **plan architecture first → search before
 build → implement & test in iterative loop → verify fully**.
+
+---
+
+## 0. Agent State Machine (Mandatory)
+
+To prevent skipping phases and ensure "muscle memory" internalization:
+
+1.  **Status Tagging**: Every single response from the Agent MUST begin with: `[CURRENT_PHASE: X]` (where X is the current phase number).
+2.  **Phase Gating**: The Agent is STRICTLY PROHIBITED from advancing to Phase N+1 until the user explicitly approves the output of Phase N (e.g., "Proceed to Phase 2").
+3.  **Zero-Code Lock**: During **Phase 1** and **Phase 2**, the Agent's output MUST NOT contain any implementation code. If code is generated before Phase 3, it is a fatal protocol violation.
 
 ---
 
@@ -21,6 +43,7 @@ without going through each phase.
 ## The Five Phases (Iterative)
 
 ```
+Phase 0  ──  Agent State Machine (Status Tagging & Gating)
 Phase 1  ──  Global Route Planning     →  Architecture + Method Map
 Phase 2  ──  Ponytail + GitHub Search   →  Reuse + Minimal Build
 
@@ -64,21 +87,30 @@ Phase 3 and Phase 4 form an **iterative loop**:
 - What dependencies are already installed?
 - What new dependencies would be needed? (Ask before adding.)
 
-### 1.4 Output
-A short plan (3–10 lines) describing: files to touch, functions to create or
-modify, and the test strategy.
+### 1.4 Output: [Phase 1.4 Sign-off Blueprint]
+The Agent MUST output the plan using this exact template:
+
+```markdown
+### [Phase 1.4 Sign-off Blueprint]
+- **Target Files:** (e.g., `src/utils/math.js`)
+- **Functions to Modify/Create:** `calculateTotal(items) -> number`
+- **Dependency Changes:** None
+- **Phase 4 Testing Command Preview:** `node -e "assert(calculateTotal([{price:10}]) === 10)"`
+*Waiting for user confirmation to proceed to Phase 2.*
+```
 
 ---
 
 ## Phase 2 — Ponytail + GitHub Search
 
-### 2.1 Search Before Build
-Before writing custom code:
-1. **Search GitHub** for existing repos, gists, or snippets that solve the
-   same problem.
-2. **Check stdlib** — can the language's standard library cover this?
-3. **Check installed dependencies** — does something already installed handle
-   this?
+### 2.1 Search Verification (Tool-use Enforcement)
+Before writing custom code, you MUST NOT "just think" about it.
+1. **Execute Search**: If you have access to search tools (GitHub, Google, or local `grep`/`find`), you **MUST** execute at least one search query relevant to the task.
+2. **Log Results**: Print the tool's output log to show proof of search.
+3. **Apply Findings**: Check if existing solutions exist in:
+   - GitHub (repos, gists, snippets)
+   - Language Standard Library (stdlib)
+   - Currently installed dependencies
 
 ### 2.2 Ponytail Ladder
 Stop at the first rung that holds:
@@ -108,34 +140,13 @@ Stop at the first rung that holds:
 Phases 3 and 4 work together as a loop. Do NOT implement everything first and
 test later.
 
-### The Loop
+### The Micro-Commit Rule
+**To prevent "teleporting" through code, you must implement only ONE unit per response.**
 
-```
-         ┌─────────────────────────────┐
-         │  Phase 3: Implement one     │
-         │  module / block             │
-         └──────────┬──────────────────┘
-                    │
-                    ▼
-         ┌─────────────────────────────┐
-         │  Phase 4: Test that module  │
-         └──────────┬──────────────────┘
-                    │
-             ┌──────┴──────┐
-             │             │
-            PASS          FAIL
-             │             │
-             │        Fix code
-             │             │
-             └──────┬──────┘
-                    │
-             ┌──────┴──────┐
-             │             │
-        more modules?  All done
-             │             │
-             ▼             ▼
-     back to Phase 3   Phase 5
-```
+1. Implement ONE function, module, or block (Phase 3).
+2. **STOP WRITING** immediately after the code block.
+3. Output the exact Phase 4 verification command.
+4. Hand the turn back to the user to execute and provide the logs.
 
 ### Phase 3 — Implementation
 
@@ -143,7 +154,6 @@ test later.
 - Write code according to Phase 1's architecture and method map.
 - Start with the smallest, most independent unit first.
 - Keep functions focused — one responsibility per function.
-- **Implement only ONE module/block at a time.**
 
 #### 3.2 Code Style
 - Use the ponytail ladder from Phase 2 to keep it minimal.
@@ -231,23 +241,17 @@ If a test fails at any phase:
 │  Coding Workflow                                          │
 ├───────────────────────────────────────────────────────────┤
 │                                                           │
-│  1. PLAN     ──── 架構規劃 + 方法調用地圖                  │
-│                    (寫 code 前完成)                        │
+│  0. STATE      ──── [CURRENT_PHASE: X] Tagging            │
 │                                                           │
-│  2. SEARCH   ──── GitHub 搜尋 + ponytail 最小化            │
-│                    (不重複造輪子)                          │
+│  1. PLAN       ──── Architecture + Sign-off Blueprint    │
 │                                                           │
-│  3. IMPLEMENT ─ 實作一個 module/block                      │
-│                    (做一個)                                │
-│        │                                                  │
-│  4. TEST    ──── 局部測試 ←── pass ── 回 Phase 3          │
-│        │                   (下一塊)                       │
-│     fail ── 修正 → retest                                 │
-│        │                                                  │
-│     全部做完 ──→ Phase 5                                  │
+│  2. SEARCH     ──── Tool-use Search + Ponytail            │
 │                                                           │
-│  5. VERIFY   ──── 全局驗證 (全部完成才做)                  │
-│                    (沒有遺漏才交貨)                        │
+│  3. IMPLEMENT  ─ 1 Unit → STOP → Phase 4 Command          │
+│                                                           │
+│  4. TEST       ──── Incremental Verification             │
+│                                                           │
+│  5. VERIFY     ──── Full System Test                      │
 │                                                           │
 └───────────────────────────────────────────────────────────┘
 ```
@@ -255,6 +259,14 @@ If a test fails at any phase:
 ---
 
 ## Changelog
+
+### 1.1.0 (2026-07-11)
+- Added **Agent Enforcement Guardrail** (HTML comment header)
+- Introduced **Phase 0: Agent State Machine** (Status Tagging & Gating)
+- Implemented **Zero-Code Lock** for Phases 1 & 2
+- Formalized **Phase 1.4 Sign-off Blueprint** (Template requirement)
+- Added **Search Verification** (Tool-use enforcement) in Phase 2.1
+- Enforced **Micro-Commit Rule** (One unit per response + mandatory stop) in Phase 3/4
 
 ### 1.0.3 (2026-07-11)
 - Fixed all ASCII art alignment (box drawing characters)
