@@ -1,7 +1,7 @@
 ---
 name: vibecode-workflow
 description: "Coding workflow methodology: plan, search, test, verify"
-version: 1.1.0
+version: 1.1.1
 ---
 
 <!--
@@ -76,6 +76,7 @@ Phase 3 and Phase 4 form an **iterative loop**:
 - What components exist? (frontend, backend, database, external APIs)
 - Draw the data flow: from user action to result and back.
 - Identify all files that will be touched or created.
+- **Impact Analysis**: Identify if this change modifies any shared utility, database schema, or common API. If yes, list the specific dependent modules that must be re-tested during Phase 5 to prevent regression.
 
 ### 1.2 Method Call Map
 - List every function, method, and API endpoint that needs to exist or be
@@ -232,6 +233,9 @@ If a test fails at any phase:
 4. If in Phase 3/4 loop: retest, then continue to next module.
 5. If in Phase 5: go back to Phase 4, fix, then re-run Phase 5.
 
+### Circuit Breaker
+If a single module/function fails Phase 4 testing or Phase 5 verification **more than 3 times consecutively**, STOP coding immediately. This indicates a fundamental flaw in Phase 1's architecture design or Phase 2's assumptions. **Forcibly rollback the git working directory to the last stable commit and return to Phase 1.**
+
 ---
 
 ## Quick Reference Card
@@ -259,6 +263,10 @@ If a test fails at any phase:
 ---
 
 ## Changelog
+
+### 1.1.1 (2026-07-11)
+- Added **Impact Analysis** to Phase 1.1 to prevent regressions in shared components.
+- Introduced **Circuit Breaker** in Error Recovery: rollback to Phase 1 after 3 consecutive failures.
 
 ### 1.1.0 (2026-07-11)
 - Added **Agent Enforcement Guardrail** (HTML comment header)
