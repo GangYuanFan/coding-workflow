@@ -1,5 +1,5 @@
 ---
-name: coding-workflow
+name: vibecode-workflow
 description: "Coding workflow methodology: plan, search, test, verify"
 version: 1.0.0
 ---

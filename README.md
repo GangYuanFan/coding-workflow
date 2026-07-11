@@ -24,7 +24,7 @@ A disciplined coding methodology that ensures every task is planned, researched,
 Clone this repo and read `SKILL.md`:
 
 ```bash
-git clone https://github.com/GangYuanFan/coding-workflow.git
+git clone https://github.com/GangYuanFan/vibecode-workflow.git
 cat SKILL.md
 ```
 
