@@ -1,7 +1,7 @@
 ---
 name: vibecode-workflow
 description: "Coding workflow methodology: plan, search, test, verify"
-version: 1.2.0
+version: 2.0.0
 ---
 
 <!--
@@ -13,6 +13,7 @@ version: 1.2.0
 # 4. MICRO-COMMIT RULE: The Agent can only implement ONE function/module per response. After implementing that single unit, the Agent MUST STOP WRITING and output the exact Phase 4 verification command, handing the turn back to the user.
 # 5. TOOL-USE ENFORCEMENT: In Phase 2, you MUST execute at least one search/grep query relevant to the task and print the tool output log. "Thinking about it" is not searching.
 # 6. SIGN-OFF BLUEPRINT: Phase 1.4 output MUST follow the prescribed Markdown template.
+# 7. DEBT LOGGING: Every Ponytail shortcut or workaround MUST be logged in DEBT.md before delivery.
 # -------------------------------------------------------------------------------------------
 -->
 
@@ -84,9 +85,9 @@ Phase 3 and Phase 4 form an **iterative loop**:
 - For each: responsibility, inputs, outputs.
 - Identify call chains: which function calls which.
 
-### 1.3 Dependency Check
-- What dependencies are already installed?
-- What new dependencies would be needed? (Ask before adding.)
+### 1.3 Context & Dependency Control
+- **Dependency Check**: What dependencies are already installed? What new dependencies would be needed? (Ask before adding.)
+- **Context Pruning**: Define the absolute *minimum* set of files required for the task. Explicitly list files that must be ignored or dropped from the context window to prevent attention dilution and token bloat.
 
 ### 1.4 Output: [Phase 1.4 Sign-off Blueprint]
 The Agent MUST output the plan using this exact template:
@@ -218,6 +219,8 @@ go back to Phase 4 to fix, then re-run Phase 5.
 
 **Commit Hygiene**: Before delivering, ensure the changes are split into clean, single-purpose commits following standard conventions (e.g., `feat:`, `fix:`). Each commit should represent one logical unit of work.
 
+**Technical Debt Ledger**: If any deliberate simplification (Ponytail Shortcut) or workaround was made to bypass a roadblock, the Agent MUST log this in a `DEBT.md` file (or a designated section) before delivery, specifying the upgrade path. No hidden debt allowed.
+
 ### 5.3 Self-Correction
 If the user points out a mistake that Phase 5 should have caught:
 1. Fix the bug immediately.
@@ -250,22 +253,27 @@ If a single module/function fails Phase 4 testing or Phase 5 verification **more
 │                                                           │
 │  0. STATE      ──── [CURRENT_PHASE: X] Tagging            │
 │                                                           │
-│  1. PLAN       ──── Architecture + Sign-off Blueprint    │
-│                                                           │
-│  2. SEARCH     ──── Tool-use Search + Ponytail            │
-│                                                           │
-│  3. IMPLEMENT  ─ 1 Unit → STOP → Phase 4 Command          │
-│                                                           │
-│  4. TEST       ──── Incremental Verification             │
-│                                                           │
-│  5. VERIFY     ──── Full System Test                      │
-│                                                           │
+│  1. PLAN       ──── Architecture + Context Pruning + Blueprint │
+│                                                                 │
+│  2. SEARCH     ──── Tool-use Search + Ponytail                  │
+│                                                                 │
+│  3. IMPLEMENT  ─ 1 Unit → STOP → Phase 4 Command                │
+│                                                                 │
+│  4. TEST       ──── Incremental Logic Assertion                 │
+│                                                                 │
+│  5. VERIFY     ──── Full Test + Debt Ledger                     │
+│                                                                 │
 └───────────────────────────────────────────────────────────┘
 ```
 
 ---
 
 ## Changelog
+
+### 2.0.0 (2026-07-11)
+- **Major Version Upgrade**: Transitioned to Enterprise-grade maintenance workflow.
+- Upgraded **Phase 1.3** to **Context & Dependency Control**: Introduced **Context Pruning** to prevent attention dilution and token bloat in large projects.
+- Added **Technical Debt Ledger** to Phase 5.2: Mandatory logging of Ponytail shortcuts and workarounds in `DEBT.md` to prevent invisible technical debt.
 
 ### 1.2.0 (2026-07-11)
 - Upgraded **Phase 4.3 Test Methods** from syntax checks to **Logic Assertions** (forcing verification of expected outputs).
