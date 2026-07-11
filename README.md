@@ -1,4 +1,4 @@
-# Jerry's Coding Workflow
+# Coding Workflow
 
 **Version 1.0.0**
 
@@ -24,11 +24,9 @@ A disciplined coding methodology that ensures every task is planned, researched,
 Clone this repo and read `SKILL.md`:
 
 ```bash
-git clone https://github.com/GangYuanFan/jerry-coding-workflow.git
+git clone https://github.com/GangYuanFan/coding-workflow.git
 cat SKILL.md
 ```
-
-Or add this repo's `SKILL.md` path to your OpenClaw skills configuration to make it available as a skill.
 
 ---
 

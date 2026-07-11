@@ -1,10 +1,10 @@
 ---
-name: jerry-coding-workflow
-description: "Jerry's coding workflow: plan architecture, search GitHub, test incrementally, verify fully"
+name: coding-workflow
+description: "Coding workflow methodology: plan, search, test, verify"
 version: 1.0.0
 ---
 
-# Jerry's Coding Workflow
+# Coding Workflow
 
 A disciplined coding methodology: **plan architecture first → search before build → test incrementally → verify fully**.
 
@@ -145,7 +145,7 @@ If a test fails at any phase:
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│  Jerry's Coding Workflow                               │
+│  Coding Workflow                                       │
 ├────────────────────────────────────────────────────────┤
 │                                                        │
 │  1. PLAN    ──── 架構規劃 + 方法調用地圖                │
