@@ -1,12 +1,12 @@
 ---
 name: vibecode-workflow
 description: "Coding workflow methodology: plan, search, test, verify"
-version: 1.0.0
+version: 1.0.2
 ---
 
 # Coding Workflow
 
-A disciplined coding methodology: **plan architecture first → search before build → implement → test incrementally → verify fully**.
+A disciplined coding methodology: **plan architecture first → search before build → implement & test in iterative loop → verify fully**.
 
 ---
 
@@ -16,15 +16,28 @@ A disciplined coding methodology: **plan architecture first → search before bu
 
 ---
 
-## The Five Phases
+## The Five Phases (Iterative)
 
 ```
-Phase 1  ──  Global Route Planning    →  Architecture + Method Map
-Phase 2  ──  Ponytail + GitHub Search  →  Reuse + Minimal Build
-Phase 3  ──  Implementation            →  Write code per plan
-Phase 4  ──  Incremental Testing       →  Partial Unit Verify
-Phase 5  ──  Full Verification         →  Complete System Test
+Phase 1  ──  Global Route Planning     →  Architecture + Method Map
+Phase 2  ──  Ponytail + GitHub Search   →  Reuse + Minimal Build
+
+               ╭─────────────────────────╮
+               │                         ▼
+Phase 3  ──  Implementation (one module) ──┐
+               │                            │ pass
+               ▼                            │
+Phase 4  ──  Incremental Testing ──────────╯
+               │             ▲
+               │   fail      │
+               ╰── 修正 ──────╯
+                         │
+                    all modules done
+                         ▼
+Phase 5  ──  Full Verification           →  Complete System Test
 ```
+
+Phase 3 and Phase 4 form an **iterative loop**: implement one module → test it → if pass, go back to implement the next module → if fail, fix and retest. Repeat until all modules are done, then proceed to Phase 5.
 
 ---
 
@@ -81,43 +94,67 @@ Stop at the first rung that holds:
 
 ---
 
-## Phase 3 — Implementation
+## Phase 3 & 4 — Iterative Implement & Test Loop
 
-### 3.1 Follow the Plan
+Phases 3 and 4 work together as a loop. Do NOT implement everything first and test later.
+
+### The Loop
+
+```
+        ┌─────────────────────────────────────┐
+        │                                     │
+        │  Phase 3: Implement one module      │
+        │        │                            │
+        │        ▼                            │
+        │  Phase 4: Test that module          │
+        │        │                            │
+        │   ┌────┴────┐                       │
+        │   │         │                       │
+        │  PASS      FAIL                     │
+        │   │         │                       │
+        │   │    Fix it │                     │
+        │   │         │                       │
+        │   └────┬────┘                       │
+        │        │                            │
+        │   more modules? ──yes──→ back to 3  │
+        │        │                            │
+        │       no                            │
+        │        │                            │
+        │        ▼                            │
+        │  Proceed to Phase 5                 │
+        └─────────────────────────────────────┘
+```
+
+### Phase 3 — Implementation
+
+#### 3.1 Follow the Plan
 - Write code according to Phase 1's architecture and method map.
 - Start with the smallest, most independent unit first.
 - Keep functions focused — one responsibility per function.
+- **Implement only ONE module/block at a time.**
 
-### 3.2 Code Style
+#### 3.2 Code Style
 - Use the ponytail ladder from Phase 2 to keep it minimal.
 - Avoid premature optimization. Make it work, then make it right.
 - Add comments for non-obvious logic and `ponytail:` simplifications.
 
-### 3.3 Implementation Order
-1. Data / models first (if any)
-2. Core logic / backend endpoints
-3. Frontend / UI components
-4. Integration wiring
+### Phase 4 — Incremental Testing
 
----
+**After writing ONE unit, test it immediately. Do not write a second unit before testing the first.**
 
-## Phase 4 — Incremental Testing
-
-**After writing each partial unit of work, test it immediately.** Do not write multiple units before testing.
-
-### 4.1 What Counts as a Partial Unit
+#### 4.1 What Counts as a Unit
 - A single function
 - A single API endpoint
 - A single UI component or view
 - A single file modification
 
-### 4.2 Unit Test Checklist
+#### 4.2 Unit Test Checklist
 - [ ] Does it run without syntax or compile errors?
 - [ ] Does it produce the expected output for normal inputs?
 - [ ] Does it handle edge cases? (empty input, null, boundary values)
 - [ ] Does it fail gracefully on invalid input?
 
-### 4.3 Test Methods
+#### 4.3 Test Methods
 
 | Language / Scope | Check | Command |
 |-----------------|-------|---------|
@@ -127,16 +164,16 @@ Stop at the first rung that holds:
 | API endpoint | Live test | `curl -s -w "%{http_code}" <url>` |
 | Logic | Inline assert | Small demo script or `assert`-based self-check |
 
-### 4.4 Rule: No "Build Everything Then Test"
-- Never write multiple functions without testing the first one.
-- If a unit fails, fix it before moving to the next unit.
-- Accumulate confidence as you go.
+#### 4.4 Decision: Pass or Fail?
+- **PASS** → Go back to Phase 3 to implement the next module/block.
+- **FAIL** → Fix the code, re-run Phase 4 test, repeat until it passes.
+- Never skip to the next module when the current one is failing.
 
 ---
 
 ## Phase 5 — Full Verification
 
-**After all units are complete, run the full system test.** This is a mandatory gate — do not deliver without passing this phase.
+**Only enter Phase 5 when ALL modules are implemented and individually tested.** This is a mandatory gate — do not deliver without passing this phase.
 
 ### 5.1 Full Test Checklist
 - [ ] All syntax checks pass (all files).
@@ -146,7 +183,7 @@ Stop at the first rung that holds:
 - [ ] No hardcoded paths or credentials left behind.
 - [ ] No dead code or unused imports.
 - [ ] No regression: existing features still work.
-- [ ] *(Self-reference)* This skill itself must be followed: verify before publishing.
+- [ ] *(Self-reference)* This skill itself was followed: verify before publishing.
 
 ### 5.2 Sign-off
 Only after all checks pass, deliver the result to the user. If any check fails, go back to Phase 4 to fix, then re-run Phase 5.
@@ -155,7 +192,7 @@ Only after all checks pass, deliver the result to the user. If any check fails, 
 If the user points out a mistake that Phase 5 should have caught:
 1. Fix the bug immediately.
 2. Add the missed check to the Phase 5 checklist so it's never missed again.
-3. Log the failure in the project memory to prevent recurrence.
+3. Log the failure to prevent recurrence.
 
 ---
 
@@ -165,7 +202,8 @@ If a test fails at any phase:
 1. **Read the error message carefully** — identify the exact line and error type.
 2. **Fix only the failing code** — do not rewrite unrelated parts.
 3. **Re-run the test** for that unit.
-4. **Continue** to the next unit or re-run Phase 5.
+4. If in Phase 3/4 loop: retest, then continue to next module.
+5. If in Phase 5: go back to Phase 4, fix, then re-run Phase 5.
 
 ---
 
@@ -182,19 +220,28 @@ If a test fails at any phase:
 │  2. SEARCH   ──── GitHub 搜尋 + ponytail 最小化            │
 │                    (不重複造輪子)                          │
 │                                                           │
-│  3. IMPLEMENT ─── 根據規劃實際寫 code                      │
-│                    (寫 code)                               │
+│      ╭────────────────────────────────────────╮            │
+│      │  3. IMPLEMENT ── 實作一個 module/block  │            │
+│      │        │                               │            │
+│      │  4. TEST ──── 局部測試 ←── pass ───╮   │            │
+│      │        │                      │      │            │
+│      │     fail 修正 → retest ──────╯      │            │
+│      │        │                               │            │
+│      ╰──── 全部完成 ──→ 5. VERIFY ─────────╯            │
 │                                                           │
-│  4. TEST     ──── 每寫一個功能 → 立刻測試                 │
-│                    (累積信心，不堆債)                      │
-│                                                           │
-│  5. VERIFY   ──── 全部完成 → 全面驗證                     │
+│  5. VERIFY   ──── 全局驗證 (全部完成才做)                 │
 │                    (沒有遺漏才交貨)                        │
 │                                                           │
 └───────────────────────────────────────────────────────────┘
 ```
 
 ## Changelog
+
+### 1.0.2 (2026-07-11)
+- Fixed workflow to be iterative: Phase 3 ↔ Phase 4 loop
+- Updated ASCII diagram to show the loop
+- Added iterative loop explanation and diagram in Phase 3&4 section
+- Clarified: implement ONE module → test → repeat
 
 ### 1.0.1 (2026-07-11)
 - Added missing Phase 3 (Implementation)
