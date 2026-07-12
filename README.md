@@ -1,4 +1,4 @@
-# vibecode-workflow v2.1.0
+# vibecode-workflow v2.2.0
 
 **The AI Agent Absolute Defense Circle (AI Agent 絕對防禦圈)**
 
@@ -10,7 +10,7 @@ A disciplined, enterprise-grade coding methodology designed to tame AI laziness,
 
 ## 🛡️ The 4-Layer Defense Architecture
 
-v2.1.0 transforms the workflow from a "guideline" into an "enforced protocol" using four layers of constraints and a dedicated tooling suite:
+v2.2.0 transforms the workflow from a "guideline" into an "enforced protocol" using four layers of constraints and a dedicated tooling suite:
 
 ### 1. 防偷跑 (State Lock)
 Prevents the AI from jumping straight to implementation.
@@ -39,7 +39,7 @@ Ensures long-term maintainability and clean history.
 
 ## 🛠️ Enforcement & Tooling
 
-To move from "self-discipline" to "system-discipline," v2.1.0 introduces:
+To move from "self-discipline" to "system-discipline," v2.2.0 introduces:
 
 ### 1. Output Templates
 Stop guessing the format. Use the standardized templates in `/templates` for every phase:
@@ -49,7 +49,7 @@ Stop guessing the format. Use the standardized templates in `/templates` for eve
 
 ### 2. Protocol Checker (`vibecode-check.py`)
 A cross-platform tool to audit compliance.
-- **Artifact Check**: Ensures `BLUEPRINT.md` and `DEBT.md` exist.
+- **Artifact Check**: Ensures `BLUEPRINT.md`, `DEBT.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `PROGRESS.md`, and `AI_RULES.md` exist.
 - **Shortcut Audit**: Scans code for `ponytail:` comments and verifies they are logged in `DEBT.md`.
 - **Log Verification**: (Optional) Scans dialogue logs for `[CURRENT_PHASE: X]` tags to detect phase skipping.
 
@@ -89,7 +89,7 @@ Check out the `/examples/perfect-run` folder for a gold-standard execution of th
 
 ---
 
-## 🏆 Why v2.1.0?
+## 🏆 Why v2.2.0?
 
 Most AI agents suffer from **"The Completion Bias"** — the urge to provide a complete answer immediately, regardless of correctness. `vibecode-workflow` replaces this bias with **"Engineering Discipline"**:
 
