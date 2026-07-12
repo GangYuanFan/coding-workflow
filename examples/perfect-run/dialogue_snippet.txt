@@ -1,0 +1,25 @@
+Agent: [CURRENT_PHASE: 1]
+I have analyzed the request. I will start by creating the Blueprint.
+(Outputs BLUEPRINT.md)
+User: Looks good, proceed to Phase 2.
+
+Agent: [CURRENT_PHASE: 2]
+I am searching for existing user profile implementations...
+(Executes `grep -r "profile" src/`)
+Found similar logic in `admin_service.js`. I will reuse the DB connection pattern.
+User: Proceed to Phase 3.
+
+Agent: [CURRENT_PHASE: 3]
+Implementing `getUserProfile` in `user_service.js`...
+(Writes code)
+// ponytail: Using findOne without projection for now.
+Verification command: `node tests/test_user_service.js`
+User: (Runs test) Result: PASS.
+
+Agent: [CURRENT_PHASE: 4]
+Verification successful. Proceeding to next unit...
+...
+Agent: [CURRENT_PHASE: 5]
+All units pass. Performing full verification.
+(Generates VERIFICATION_REPORT.md and updates DEBT.md)
+The project is now ready for delivery.

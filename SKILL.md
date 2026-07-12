@@ -90,16 +90,9 @@ Phase 3 and Phase 4 form an **iterative loop**:
 - **Context Pruning**: Define the absolute *minimum* set of files required for the task. Explicitly list files that must be ignored or dropped from the context window to prevent attention dilution and token bloat.
 
 ### 1.4 Output: [Phase 1.4 Sign-off Blueprint]
-The Agent MUST output the plan using this exact template:
+The Agent MUST output the plan using this exact template (`templates/blueprint.md`). 
 
-```markdown
-### [Phase 1.4 Sign-off Blueprint]
-- **Target Files:** (e.g., `src/utils/math.js`)
-- **Functions to Modify/Create:** `calculateTotal(items) -> number`
-- **Dependency Changes:** None
-- **Phase 4 Testing Command Preview:** `node -e "assert(calculateTotal([{price:10}]) === 10)"`
-*Waiting for user confirmation to proceed to Phase 2.*
-```
+**Crucially, this blueprint must bridge the gap to the end: you must define the Phase 5 Comprehensive Verification Plan here, ensuring that you aren't just "winging it" at the final stage.**
 
 ---
 

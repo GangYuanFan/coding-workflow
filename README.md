@@ -1,4 +1,4 @@
-# vibecode-workflow v2.0.0
+# vibecode-workflow v2.1.0
 
 **The AI Agent Absolute Defense Circle (AI Agent 絕對防禦圈)**
 
@@ -10,7 +10,7 @@ A disciplined, enterprise-grade coding methodology designed to tame AI laziness,
 
 ## 🛡️ The 4-Layer Defense Architecture
 
-v2.0.0 transforms the workflow from a "guideline" into a "strict protocol" using four layers of constraints:
+v2.1.0 transforms the workflow from a "guideline" into an "enforced protocol" using four layers of constraints and a dedicated tooling suite:
 
 ### 1. 防偷跑 (State Lock)
 Prevents the AI from jumping straight to implementation.
@@ -21,32 +21,55 @@ Prevents the AI from jumping straight to implementation.
 ### 2. 防失控 (Stability Lock)
 Ensures the code actually works and doesn't break the system.
 - **Impact Analysis**: Pre-emptive assessment of regressions in shared utilities.
-- **Logic Assertions**: Replaces simple syntax checks with "Expected Output" verification.
+- **Logic Assertions**: Replaces simple syntax checks with "Expected Output" verification (See `templates/assertion.md`).
 - **Circuit Breaker**: Mandatory rollback to Phase 1 after 3 consecutive test failures.
 
 ### 3. 防稀釋 (Attention Lock)
 Maintains LLM focus in large-scale projects.
-- **Context Pruning**: Explicit definition of the absolute minimum file-set.
+- **Context Pruning**: Explicit definition of the absolute minimum file-set (See `templates/blueprint.md`).
 - **Noise Reduction**: Mandatory exclusion of irrelevant files to prevent attention dilution.
 
 ### 4. 防腐蝕 (Hygiene Lock)
 Ensures long-term maintainability and clean history.
 - **Micro-Commits**: One logical unit per response $\rightarrow$ STOP $\rightarrow$ Test.
 - **Commit Hygiene**: Single-purpose commits following standard conventions (`feat:`, `fix:`).
-- **Technical Debt Ledger**: Mandatory logging of all Ponytail shortcuts in `DEBT.md`.
+- **Technical Debt Ledger**: Mandatory logging of all Ponytail shortcuts in `DEBT.md` (See `templates/debt.md`).
+
+---
+
+## 🛠️ Enforcement & Tooling
+
+To move from "self-discipline" to "system-discipline," v2.1.0 introduces:
+
+### 1. Output Templates
+Stop guessing the format. Use the standardized templates in `/templates` for every phase:
+- **Phase 1 $\rightarrow$ `templates/blueprint.md`**: Standardized architecture, impact map, and Phase 5 verification plan.
+- **Phase 4 $\rightarrow$ `templates/assertion.md`**: Evidence-based test logs.
+- **Phase 5 $\rightarrow$ `templates/debt.md` & `templates/verification.md`**: Debt tracking and final sign-off.
+
+### 2. Protocol Checker (`vibecode-check.py`)
+A cross-platform tool to audit compliance.
+- **Artifact Check**: Ensures `BLUEPRINT.md` and `DEBT.md` exist.
+- **Shortcut Audit**: Scans code for `ponytail:` comments and verifies they are logged in `DEBT.md`.
+- **Log Verification**: (Optional) Scans dialogue logs for `[CURRENT_PHASE: X]` tags to detect phase skipping.
+
+**Run it before delivery:**
+```bash
+python scripts/vibecode-check.py [optional_dialog_log.txt]
+```
 
 ---
 
 ## 🔄 The Five Phases (Iterative)
 
-| Phase | Name | Core Objective | Key Constraint |
-|---|---|---|---|
-| **0** | **State Machine** | Establish Context | `[CURRENT_PHASE: X]` tagging |
-| **1** | **Global Route Planning** | Architecture & Impact | **Zero-Code Lock** + Sign-off Blueprint |
-| **2** | **Ponytail + Search** | Minimalist Discovery | **Tool-use Enforcement** (Search logs) |
-| **3** | **Implementation** | Atomic Development | **Micro-Commit Rule** (1 unit $\rightarrow$ STOP) |
-| **4** | **Incremental Testing** | Logic Verification | **Logic Assertions** (Expected Output) |
-| **5** | **Full Verification** | System Sign-off | **Debt Ledger** + Commit Hygiene |
+| Phase | Name | Core Objective | Key Constraint | Template |
+|---|---|---|---|---|
+| **0** | **State Machine** | Establish Context | `[CURRENT_PHASE: X]` tagging | N/A |
+| **1** | **Global Route Planning** | Architecture, Impact & **Phase 5 Plan** | **Zero-Code Lock** | `blueprint.md` |
+| **2** | **Ponytail + Search** | Minimalist Discovery | **Tool-use Enforcement** | N/A |
+| **3** | **Implementation** | Atomic Development | **Micro-Commit Rule** | N/A |
+| **4** | **Incremental Testing** | Logic Verification | **Logic Assertions** | `assertion.md` |
+| **5** | **Full Verification** | System Sign-off | **Debt Ledger** | `debt.md`/`verification.md` |
 
 **Phase 3 $\leftrightarrow$ Phase 4 Loop**: Implement one $\rightarrow$ Assert $\rightarrow$ Pass $\rightarrow$ Next. Fail $\rightarrow$ Fix $\rightarrow$ Retest. (3 fails $\rightarrow$ Circuit Breaker $\rightarrow$ Phase 1).
 
@@ -62,15 +85,18 @@ git clone https://github.com/GangYuanFan/vibecode-workflow.git
 cat SKILL.md
 ```
 
+Check out the `/examples/perfect-run` folder for a gold-standard execution of the protocol.
+
 ---
 
-## 🏆 Why v2.0.0?
+## 🏆 Why v2.1.0?
 
 Most AI agents suffer from **"The Completion Bias"** — the urge to provide a complete answer immediately, regardless of correctness. `vibecode-workflow` replaces this bias with **"Engineering Discipline"**:
 
 - **From "It looks right" $\rightarrow$ "It is asserted right"** (Logic Assertions).
 - **From "I'll fix it later" $\rightarrow$ "It is logged in DEBT.md"** (Debt Ledger).
 - **From "Let me try again" $\rightarrow$ "I must rethink the architecture"** (Circuit Breaker).
+- **From "I'll just follow the rules" $\rightarrow$ "The tool verified I followed the rules"** (Compliance Checker).
 
 ---
 
